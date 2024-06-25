@@ -18,10 +18,6 @@ const { result, loading, error } = useQuery(gql`
     }
   }
 `);
-
-const { result, loading, error } = {
-  error: { message: "No connection to the GraphQL API yet." },
-};
 </script>
 
 <template>
