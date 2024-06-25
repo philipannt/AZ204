@@ -1,14 +1,34 @@
-import './assets/main.css'
+import "./assets/main.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp, provide, h } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+} from "@apollo/client/core";
+import { DefaultApolloClient } from "@vue/apollo-composable";
 
-import App from './App.vue'
-import router from './router'
+const httpLink = createHttpLink({
+  uri: "http://localhost:8000/graphql/",
+});
 
-const app = createApp(App)
+const cache = new InMemoryCache();
 
-app.use(createPinia())
-app.use(router)
+const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache,
+});
 
-app.mount('#app')
+const app = createApp({
+  setup() {
+    provide(DefaultApolloClient, apolloClient);
+  },
+
+  render: () => h(App),
+});
+
+app.use(router);
+
+app.mount("#app");
